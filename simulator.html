@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enigma Simulator</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <header class="site-header">
+        <a class="logo" href="index.html">The Enigma Machine</a>
+        <nav class="nav" aria-label="Main navigation">
+            <a href="history.html">History</a>
+            <a href="how-it-worked.html">How it Worked</a>
+            <a href="simulator.html" aria-current="page">Enigma Simulator</a>
+        </nav>
+    </header>
+
+    <main class="page-shell">
+        <section class="page-title">
+            <p class="eyebrow">Enigma Simulator</p>
+            <h1>Configure and run a three-rotor Enigma I</h1>
+            <p>
+                Follow the same basic rules operators had to follow: choose three different rotors, use valid
+                plugboard pairs, record your settings, and reset the same starting positions before decrypting.
+            </p>
+        </section>
+
+        <section class="panel">
+            <div class="guide">
+                <h2>Quick guide</h2>
+                <ol>
+                    <li>Choose three different rotors and a reflector.</li>
+                    <li>Set each rotor's starting position from A to Z.</li>
+                    <li>Add plugboard pairs such as <code>AB CD EF</code>. Each letter can appear once.</li>
+                    <li>Type a message and press <strong>Encrypt / Decrypt</strong>. Reset the same settings and run the
+                        ciphertext again to decrypt.</li>
+                </ol>
+            </div>
+
+            <div class="simulator-card">
+                <form id="enigmaForm" class="controls">
+                    <fieldset>
+                        <legend>Step 1: Select rotors</legend>
+                        <div class="rotor-grid">
+                            <label>Left rotor
+                                <select id="rotorLeft"></select>
+                            </label>
+                            <label>Middle rotor
+                                <select id="rotorMiddle"></select>
+                            </label>
+                            <label>Right rotor
+                                <select id="rotorRight"></select>
+                            </label>
+                            <label>Reflector
+                                <select id="reflector">
+                                    <option value="B">Reflector B</option>
+                                    <option value="C">Reflector C</option>
+                                </select>
+                            </label>
+                        </div>
+                        <p id="rotorWarning" class="field-warning" aria-live="polite"></p>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Step 2: Set starting positions</legend>
+                        <div class="rotor-grid">
+                            <label>Left position
+                                <select id="posLeft"></select>
+                            </label>
+                            <label>Middle position
+                                <select id="posMiddle"></select>
+                            </label>
+                            <label>Right position
+                                <select id="posRight"></select>
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Step 3: Configure plugboard</legend>
+                        <label>Plugboard pairs
+                            <input id="plugboard" type="text" placeholder="Example: AB CD EF" />
+                        </label>
+                        <p class="hint">Use two-letter pairs separated by spaces, commas, or semicolons.</p>
+                        <p id="plugboardWarning" class="field-warning" aria-live="polite"></p>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Step 4: Enter a message</legend>
+                        <label>Plaintext or ciphertext
+                            <textarea id="message" rows="7" placeholder="Type your message here..."></textarea>
+                        </label>
+                    </fieldset>
+
+                    <div class="actions">
+                        <button class="button" type="submit">Encrypt / Decrypt</button>
+                        <button class="button button--secondary" id="resetButton" type="button">Reset</button>
+                    </div>
+                    <p id="error" class="error" role="alert" aria-live="polite"></p>
+                </form>
+
+                <aside class="output-panel">
+                    <h2>Output</h2>
+                    <p class="hint">Non-letter characters are preserved. Letter output is grouped in blocks of five for
+                        readability.</p>
+                    <output id="output">Your encrypted or decrypted message will appear here.</output>
+                    <div class="machine-state">
+                        <h3>Final rotor windows</h3>
+                        <p id="finalPositions">A A A</p>
+                    </div>
+                    <div class="machine-state">
+                        <h3>Remember for decryption</h3>
+                        <p class="settings-reminder">Use the same rotor order, reflector, starting positions, and
+                            plugboard pairs.</p>
+                    </div>
+                </aside>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Created by Noel Bass · <a href="https://github.com/noeljbass" target="_blank"
+                rel="noopener noreferrer">GitHub</a></p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+
+</html>

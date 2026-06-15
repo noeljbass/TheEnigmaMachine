@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How the Enigma Machine Worked</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <header class="site-header">
+        <a class="logo" href="index.html">The Enigma Machine</a>
+        <nav class="nav" aria-label="Main navigation">
+            <a href="history.html">History</a>
+            <a href="how-it-worked.html" aria-current="page">How it Worked</a>
+            <a href="simulator.html">Enigma Simulator</a>
+        </nav>
+    </header>
+
+    <main class="page-shell">
+        <section class="page-title">
+            <p class="eyebrow">How it Worked</p>
+            <h1>A practical guide before you use the simulator</h1>
+            <p>
+                Imagine Enigma as an electric maze. Every letter you type travels through plugboard cables,
+                moving rotors, a reflector, and then back through the rotors before a lamp lights up.
+            </p>
+        </section>
+
+        <section class="panel lesson-grid">
+            <article class="lesson-card">
+                <span class="step">1</span>
+                <h2>Rotors are moving scrambled alphabets</h2>
+                <p>
+                    A rotor changes one letter into another using hidden wiring. After each keypress, the right
+                    rotor moves. Sometimes it pushes the middle rotor, and the middle rotor can push the left
+                    rotor. That movement is why pressing the same letter twice can produce different results.
+                </p>
+                <p class="try-this">Try this: in the simulator, keep the same settings and type <strong>AAAAA</strong>.
+                    Notice that the output letters are not all the same.</p>
+            </article>
+            <article class="lesson-card">
+                <span class="step">2</span>
+                <h2>The reflector bounces the signal back</h2>
+                <p>
+                    The reflector acts like a mirror for the electrical signal. It sends the signal back through
+                    the rotors in reverse. This is why the same setup encrypts and decrypts: if the settings are
+                    reset exactly, ciphertext travels the same path backward to reveal the original message.
+                </p>
+                <p class="try-this">Try this: encrypt a word, reset to the same starting positions, paste the
+                    ciphertext, and run it again.</p>
+            </article>
+            <article class="lesson-card">
+                <span class="step">3</span>
+                <h2>Plugboard pairs swap letters before and after</h2>
+                <p>
+                    Plugboard cables connect letters in pairs. If <strong>AB</strong> is connected, A becomes B and B
+                    becomes A before entering the rotors. The swap happens again after the signal comes back out.
+                    A letter can only be used in one pair, so <strong>AB AC</strong> is invalid because A appears twice.
+                </p>
+                <p class="try-this">Try this: compare the same message with no plugboard, then with <strong>AB CD
+                        EF</strong>.</p>
+            </article>
+            <article class="lesson-card">
+                <span class="step">4</span>
+                <h2>Daily key sheets kept operators synchronized</h2>
+                <p>
+                    German units used shared secret key sheets prepared in advance. Everyone with the correct
+                    sheet could look up today’s rotor order, starting positions, and plugboard pairs without
+                    asking over the radio. If two operators set the same daily key, their machines matched.
+                </p>
+                <p class="try-this">Try this: write down your simulator settings before encrypting. You need the exact
+                    same settings to decrypt.</p>
+            </article>
+        </section>
+
+        <section class="panel panel--dark signal-path">
+            <h2>The signal path</h2>
+            <p class="path-line">Keyboard → Plugboard → Right rotor → Middle rotor → Left rotor → Reflector → Left rotor
+                → Middle rotor → Right rotor → Plugboard → Lamp</p>
+            <a class="button" href="simulator.html">Test these ideas in the simulator</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>Created by Noel Bass · <a href="https://github.com/noeljbass" target="_blank"
+                rel="noopener noreferrer">GitHub</a></p>
+    </footer>
+</body>
+
+</html>
