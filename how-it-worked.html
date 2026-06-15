@@ -11,6 +11,12 @@
 <body>
     <header class="site-header">
         <a class="logo" href="index.html">The Enigma Machine</a>
+        <input class="menu-toggle" type="checkbox" id="menu-toggle" aria-label="Toggle navigation menu" />
+        <label class="menu-button" for="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
         <nav class="nav" aria-label="Main navigation">
             <a href="history.html">History</a>
             <a href="how-it-worked.html" aria-current="page">How it Worked</a>
@@ -80,6 +86,90 @@
             <p class="path-line">Keyboard → Plugboard → Right rotor → Middle rotor → Left rotor → Reflector → Left rotor
                 → Middle rotor → Right rotor → Plugboard → Lamp</p>
             <a class="button" href="simulator.html">Test these ideas in the simulator</a>
+        </section>
+
+        <section class="panel code-walkthrough">
+            <div>
+                <p class="eyebrow">JavaScript simulator</p>
+                <h2>How the code mimics the mechanical original</h2>
+                <p>
+                    The simulator turns the physical Enigma parts into small JavaScript functions. Rotor wiring becomes
+                    lookup strings, rotor windows become number positions from 0 to 25, and every keypress advances the
+                    machine before sending the signal through the same path as the original hardware.
+                </p>
+            </div>
+
+            <article class="code-example">
+                <h3>1. Rotor wiring is stored like a scrambled alphabet</h3>
+                <p>
+                    Each rotor object has a <code>wiring</code> string and a <code>notch</code>. The wiring string tells
+                    JavaScript which output letter appears at each input position, just like the hidden wires inside a
+                    real rotor.
+                </p>
+                <pre><code>const rotors = {
+  I: { wiring: "EKMFLGDQVZNTOWYHXUSPAIBRCJ", notch: "Q" },
+  II: { wiring: "AJDKSIRUXBLHWTMCQGZNPYFVOE", notch: "E" },
+  III: { wiring: "BDFHJLCPRTXVZNYEIWGAKMUSQO", notch: "V" },
+};</code></pre>
+            </article>
+
+            <article class="code-example">
+                <h3>2. The plugboard becomes a two-way map</h3>
+                <p>
+                    A real plugboard cable swaps two letters in both directions. The JavaScript version creates a
+                    <code>Map</code> where every letter starts by pointing to itself, then valid pairs overwrite both
+                    directions.
+                </p>
+                <pre><code>const map = new Map(alphabet.split("").map((letter) =&gt; [letter, letter]));
+
+map.set("A", "B");
+map.set("B", "A");</code></pre>
+            </article>
+
+            <article class="code-example">
+                <h3>3. Rotor stepping happens before the signal moves</h3>
+                <p>
+                    Enigma moved its rotors as the key was pressed. The code follows that order by calling
+                    <code>stepRotors(state)</code> before converting the letter. The notch checks imitate the moments
+                    when one rotor pushes the next rotor forward.
+                </p>
+                <pre><code>function stepRotors(state) {
+  const middleAtNotch = atNotch(state.names[1], state.positions[1]);
+  const rightAtNotch = atNotch(state.names[2], state.positions[2]);
+
+  if (middleAtNotch) {
+    state.positions[0] = (state.positions[0] + 1) % 26;
+    state.positions[1] = (state.positions[1] + 1) % 26;
+  } else if (rightAtNotch) {
+    state.positions[1] = (state.positions[1] + 1) % 26;
+  }
+
+  state.positions[2] = (state.positions[2] + 1) % 26;
+}</code></pre>
+            </article>
+
+            <article class="code-example">
+                <h3>4. One letter follows the full electrical loop</h3>
+                <p>
+                    The function below is the software version of a lamp lighting up: plugboard, right-to-left rotors,
+                    reflector, left-to-right rotors, and plugboard again. Because the reflector sends the signal back
+                    through the same machine, the same settings can decrypt the message.
+                </p>
+                <pre><code>function encipherLetter(letter, state, plugboard) {
+  stepRotors(state);
+
+  let signal = letterToIndex(plugboard.get(letter));
+  signal = passThroughRotorForward(signal, state.names[2], state.positions[2]);
+  signal = passThroughRotorForward(signal, state.names[1], state.positions[1]);
+  signal = passThroughRotorForward(signal, state.names[0], state.positions[0]);
+  signal = letterToIndex(reflectors[state.reflector][signal]);
+  signal = passThroughRotorBackward(signal, state.names[0], state.positions[0]);
+  signal = passThroughRotorBackward(signal, state.names[1], state.positions[1]);
+  signal = passThroughRotorBackward(signal, state.names[2], state.positions[2]);
+
+  return plugboard.get(indexToLetter(signal));
+}</code></pre>
+            </article>
         </section>
     </main>
 
